@@ -5,6 +5,7 @@ const { generateAndSetJwt } = require("../config/jwt");
 require("dotenv").config();
 
 module.exports = {
+  //----------Admin Login-------------//
   loginAdmin: async (req, res) => {
     try {
       const adminData = await Users.findOne({ email: req.body.email, isAdmin: true });
@@ -23,7 +24,7 @@ module.exports = {
       console.log(error);
     }
   },
-
+  //----------Admin Logout-------------//
   logout: async (req, res) => {
     try {
       res.cookie("jwt", "", { maxAge: 0 });
@@ -32,7 +33,7 @@ module.exports = {
       console.log(error);
     }
   },
-
+  //----------Admin Home-------------//
   loadHome: async (req, res) => {
     try {
       const cookie = req.cookies["jwt"];
@@ -47,7 +48,7 @@ module.exports = {
       return res.status(401).send({ message: "unauthenticated" });
     }
   },
-
+  //----------Admin Users view------------//
   loadUsersList: async (req, res) => {
     try {
       const users = await Users.find();
@@ -56,7 +57,7 @@ module.exports = {
       res.status(500).send("Internal Server Error");
     }
   },
-
+  //----------Admin delete user-------------//
   deleteUser: async (req, res) => {
     try {
       const deletedUser = await Users.findByIdAndDelete({ _id: req.params.id });
@@ -66,7 +67,7 @@ module.exports = {
       console.log(error);
     }
   },
-
+  //----------Admin user details--------------//
   userDetails: async (req, res) => {
     try {
       const userData = await Users.findById({ _id: req.params.id });
@@ -77,7 +78,7 @@ module.exports = {
       console.log(error);
     }
   },
-
+  //----------Admin edit user-------------//
   editUser: async (req, res) => {
     try {
       const { name, email } = req.body;
@@ -88,7 +89,7 @@ module.exports = {
       console.log(error);
     }
   },
-
+  //----------Admin create user-------------//
   createUser: async (req, res) => {
     try {
       const { email, passsword, name } = req.body;

@@ -11,6 +11,7 @@ require("dotenv").config();
 
 const app = express();
 mongoConnect();
+const PORT = process.env.PORT
 
 // ====================Directory Path to Different Routes====================
 
@@ -32,10 +33,11 @@ app.use(
 
 // ====================Router-Level Middlewares====================
 
-// app.use("/images", express.static(path.join(__dirname, "./images")));
+app.use("/images", express.static(path.join(__dirname, "./images")));
 
 // ====================ROUTES====================
 app.use('/api/user',userRouter);
+console.log("using adminRoutes");
 app.use('/api/admin',adminRouter);
 
-app.listen(3000, () => console.log("Listening on port 3000"));
+app.listen(PORT, () => console.log("Listening on port ",PORT));

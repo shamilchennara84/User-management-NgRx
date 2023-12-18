@@ -5,6 +5,21 @@ require("dotenv").config();
 // const upload = require("../config/multer");
 
 module.exports = {
+  //----------Load User Home-------------//
+  loadUserHome: async (req, res) => {
+    try {
+      const cookie = req.cookies["jwt"];
+      const claims = jwt.verify(cookie, process.env.JWT_SECRET);
+      if (!claims) {
+        return res.status(401).send({ message: "Unauthenticated" });
+      }
+      const userData = await Users.findOne({ _id: claims._id });
+      const { password, ...data } = userData.toJSON();
+      res.send(data);
+    } catch (error) {
+      return res.status(401).send({ message: "Unauthenticated" });
+    }
+  },
   //----------Register User-------------//
   registerUser: async (req, res) => {
     try {
@@ -59,22 +74,6 @@ module.exports = {
     } catch (error) {
       console.error("An unexpected error occurred:", error.message);
       res.status(500).send({ message: "Internal Server Error" });
-    }
-  },
-
-  //----------Load User Home-------------//
-  loadUserHome: async (req, res) => {
-    try {
-      const cookie = req.cookies["jwt"];
-      const claims = jwt.verify(cookie, process.env.JWT_SECRET);
-      if (!claims) {
-        return res.status(401).send({ message: "Unauthenticated" });
-      }
-      const userData = await Users.findOne({ _id: claims._id });
-      const { password, ...data } = userData.toJSON();
-      res.send(data);
-    } catch (error) {
-      return res.status(401).send({ message: "Unauthenticated" });
     }
   },
 
