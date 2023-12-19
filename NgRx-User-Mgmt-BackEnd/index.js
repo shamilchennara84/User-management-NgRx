@@ -36,8 +36,8 @@ app.use(
 app.use("/images", express.static(path.join(__dirname, "./images")));
 
 // ====================ROUTES====================
-app.use('/api/user',userRouter);
+app.use('/user',userRouter);
 console.log("using adminRoutes");
-app.use('/api/admin',adminRouter);
+app.use('/admin',adminRouter);
 
 app.listen(PORT, () => console.log("Listening on port ",PORT));

@@ -1,6 +1,7 @@
 const Users = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const { generateAndSetJwt } = require("../config/jwt");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
 // const upload = require("../config/multer");
 
@@ -17,6 +18,7 @@ module.exports = {
       const { password, ...data } = userData.toJSON();
       res.send(data);
     } catch (error) {
+      console.log(error);
       return res.status(401).send({ message: "Unauthenticated" });
     }
   },
