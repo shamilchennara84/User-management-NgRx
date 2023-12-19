@@ -23,9 +23,12 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
+    private router:Router,
     private store: Store<{ userDetails: User }>
   ) {}
+
+  // private userDataSubscription: Subscription | undefined;
+
   userData$ = this.store
     .pipe(select(userProfileSelector))
     .subscribe((profileData) => {
@@ -38,10 +41,10 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     Emitters.authEmitter.emit(true);
   }
-ngOnInit(): void {
+  ngOnInit(): void {
     this.store.dispatch(retrieveProfile());
-  }
 
+  }
   onSubmit() {
     const formData = new FormData();
     formData.append('image', this.selectedFile, this.selectedFile.name);
@@ -65,7 +68,26 @@ ngOnInit(): void {
 
     if (inputElement.files && inputElement.files.length > 0) {
       this.selectedFile = inputElement.files[0];
-      console.log(this.selectedFile);
     }
   }
 }
+
+// Subscribe to the userData$ observable
+// this.userDataSubscription = this.store
+//   .pipe(select(userProfileSelector))
+//   .subscribe((profileData) => {
+//     // Ensure that profileData is not undefined before accessing its properties
+//     if (profileData) {
+//       this.name = profileData.name;
+//       this.email = profileData.email;
+//       this.img = profileData.image;
+//       console.log('profileData', profileData);
+//     }
+//   });
+
+// ngOnDestroy(): void {
+//   // Unsubscribe when the component is destroyed
+//   if (this.userDataSubscription) {
+//     this.userDataSubscription.unsubscribe();
+//   }
+// }

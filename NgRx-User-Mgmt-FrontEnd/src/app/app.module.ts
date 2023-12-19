@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -14,7 +14,11 @@ import { ProfileComponent } from './components/user/profile/profile.component';
 import { UserNavComponent } from './components/user/user-nav/user-nav.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TransformUrlInterceptor } from './interceptors/transform-url.interceptor';
-import { profileReducer, usersReducer } from './states/user/user.reduce';
+import { profileReducer } from './states/user/user.reduce';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { userEffects } from './states/user/user.effects';
+
+import { AdminLoginComponent } from './components/admin/admin-login/admin-login.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +28,7 @@ import { profileReducer, usersReducer } from './states/user/user.reduce';
     HomeComponent,
     ProfileComponent,
     UserNavComponent,
+    AdminLoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,9 +38,9 @@ import { profileReducer, usersReducer } from './states/user/user.reduce';
     FormsModule,
     StoreModule.forRoot({
       userDetails: profileReducer,
-      allUsers: usersReducer,
     }),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([userEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
   ],
   providers: [
     {
