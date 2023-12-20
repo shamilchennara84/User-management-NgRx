@@ -14,11 +14,18 @@ import { ProfileComponent } from './components/user/profile/profile.component';
 import { UserNavComponent } from './components/user/user-nav/user-nav.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TransformUrlInterceptor } from './interceptors/transform-url.interceptor';
-import { profileReducer } from './states/user/user.reduce';
+import { profileReducer, usersReducer } from './states/user/user.reduce';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { userEffects } from './states/user/user.effects';
 
 import { AdminLoginComponent } from './components/admin/admin-login/admin-login.component';
+import { AdminNavComponent } from './components/admin/admin-nav/admin-nav.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { UsersListComponent } from './components/admin/users-list/users-list.component';
+import { EditListComponent } from './components/admin/edit-list/edit-list.component';
+import { CreateUserComponent } from './components/admin/create-user/create-user.component';
+import { AdminRoutingModule } from './components/admin/admin-login/admin.routing';
+
 
 @NgModule({
   declarations: [
@@ -29,15 +36,22 @@ import { AdminLoginComponent } from './components/admin/admin-login/admin-login.
     ProfileComponent,
     UserNavComponent,
     AdminLoginComponent,
+    AdminNavComponent,
+    DashboardComponent,
+    UsersListComponent,
+    EditListComponent,
+    CreateUserComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    AdminRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule,
     StoreModule.forRoot({
       userDetails: profileReducer,
+      allUsers: usersReducer,
     }),
     EffectsModule.forRoot([userEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),

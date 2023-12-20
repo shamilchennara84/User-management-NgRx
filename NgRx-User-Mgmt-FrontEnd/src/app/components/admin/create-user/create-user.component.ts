@@ -6,22 +6,23 @@ import { hasFormErrors } from '../../../helpers/form.validation.helper';
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-admin-login',
-  templateUrl: './admin-login.component.html',
-  styleUrl: './admin-login.component.css',
+  selector: 'app-create-user',
+  templateUrl: './create-user.component.html',
+  styleUrl: './create-user.component.css',
 })
-export class AdminLoginComponent implements OnInit {
+export class CreateUserComponent implements OnInit {
   form!: FormGroup;
   isSubmitted = false;
 
   constructor(
-    private formbuilder: FormBuilder,
     private http: HttpClient,
+    private formBuilder: FormBuilder,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.form = this.formbuilder.group({
+    this.form = this.formBuilder.group({
+      name: ['', Validators.required],
       email: ['', Validators.required, Validators.email],
       password: ['', Validators.required],
     });
@@ -31,7 +32,7 @@ export class AdminLoginComponent implements OnInit {
     return this.form.controls;
   }
 
-  onSubmit(): void {
+  onSubmit() {
     this.isSubmitted = true;
 
     if (hasFormErrors(this.form)) {
@@ -41,16 +42,15 @@ export class AdminLoginComponent implements OnInit {
         'warning'
       );
     } else {
-      const admin = this.form.getRawValue();
+      const user = this.form.getRawValue();
       this.http
-        .post('admin/login', admin, { withCredentials: true })
+        .post('admin/createUser', user, { withCredentials: true })
         .subscribe({
           next: () => {
-            localStorage.setItem('isAdminLoggedIn', 'true');
-            this.router.navigate(['/admin/dashboard']);
+            this.router.navigate(['/admin/userList']);
           },
           error: (err) => {
-            Swal.fire('error', err.error.message, 'error');
+            Swal.fire('Error', err.error.message, 'error');
           },
         });
     }

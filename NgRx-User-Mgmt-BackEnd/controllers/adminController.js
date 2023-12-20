@@ -8,12 +8,15 @@ module.exports = {
   //----------Admin Login-------------//
   loginAdmin: async (req, res) => {
     try {
+      console.log("login body", req.body);
       const adminData = await Users.findOne({ email: req.body.email, isAdmin: true });
       if (!adminData) {
+        console.log("This admin email not exist");
         return res.status(400).send({ message: "This admin not exist" });
       }
 
       if (!(await bcrypt.compare(req.body.password, adminData.password))) {
+        console.log("Password is Incorrect");
         return res.status(400).send({
           message: "Password is Incorrect",
         });
@@ -33,6 +36,28 @@ module.exports = {
       console.log(error);
     }
   },
+  //----------Admin Active-------------//
+
+  
+  isActive: async (req, res) => {
+    try {
+      const cookie = req.cookies["jwt"];
+      console.log("cookie",cookie)
+      const claims = jwt.verify(cookie, process.env.JWT_SECRET);
+      console.log("claims",claims);
+      if (!claims) {
+        console.log("claims issue");
+        return res.status(401).send({ message: "Unautherized :(" });
+      }
+      const user = await Users.findOne({ _id: claims._id, isAdmin: true });
+      const { password, ...data } = user.toJSON();
+      res.send(data);
+    } catch (error) {
+      console.log("hello",error);
+      return res.status(401).send({ message: "unauthenticated" });
+    }
+  },
+
   //----------Admin Home-------------//
   loadHome: async (req, res) => {
     try {
@@ -42,7 +67,7 @@ module.exports = {
         return res.status(401).send({ message: "Unautherized :(" });
       }
       const userData = await Users.findOne({ _id: userData._id, isAdmin: true });
-      const { password, ...data } = Users.toJSON();
+      const { password, ...data } = userData.toJSON();
       res.send(data);
     } catch (error) {
       return res.status(401).send({ message: "unauthenticated" });
@@ -92,7 +117,7 @@ module.exports = {
   //----------Admin create user-------------//
   createUser: async (req, res) => {
     try {
-      const { email, passsword, name } = req.body;
+      const { email, password, name } = req.body;
       const isEmailExist = await Users.findOne({ email });
       if (isEmailExist) {
         return res.status(400).send({ message: "Email already registered" });
@@ -100,7 +125,7 @@ module.exports = {
 
       const salt = await bcrypt.genSalt(10);
       const hashPass = await bcrypt.hash(password, salt);
-      await new Users({ name, email, password: hashedPass }).save();
+      await new Users({ name, email, password: hashPass }).save();
       res.send({ message: "Success" });
     } catch (error) {
       console.log(error);

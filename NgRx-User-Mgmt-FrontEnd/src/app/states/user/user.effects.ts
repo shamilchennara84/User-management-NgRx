@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { UserService } from '../../services/user.service';
 import {
-  // retrieveUsersSuccess,
+  retrieveUsersSuccess,
   retrieveProfileSuccess,
-  // retrieveUsers,
+  retrieveUsers,
   retrieveProfile,
 } from './user.actions';
 import { User } from '../../models/user.model';
@@ -18,27 +18,26 @@ export class userEffects {
     this.actions$.pipe(
       ofType(retrieveProfile),
       switchMap(() => {
-        return this.userService
-          .loadProfile()
-          .pipe(
-            map((data) =>{
-              console.log(data);
-              return retrieveProfileSuccess({ userDetails: data as User })}  )
-          );
+        return this.userService.loadProfile().pipe(
+          map((data) => {
+            // console.log(data);
+            return retrieveProfileSuccess({ userDetails: data as User });
+          })
+        );
       })
     )
   );
 
-  // loadAllUsers$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(retrieveUsers),
-  //     switchMap(() => {
-  //       return this.userService
-  //         .loadUsers()
-  //         .pipe(
-  //           map((data) => retrieveUsersSuccess({ allUsers: data as User[] }))
-  //         );
-  //     })
-  //   )
-  // );
+  loadAllUsers$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(retrieveUsers),
+      switchMap(() => {
+        return this.userService.loadUsers().pipe(
+          map((data) => {
+            return retrieveUsersSuccess({ allUsers: data as User[] });
+          })
+        );
+      })
+    )
+  );
 }

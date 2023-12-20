@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import { User } from '../../models/user.model';
-import {  retrieveProfileSuccess } from './user.actions';
+import { retrieveProfileSuccess, retrieveUsersSuccess } from './user.actions';
 
 export const userInitialState: User = {
   _id: '',
@@ -12,9 +12,8 @@ export const userInitialState: User = {
 
 const _profileReducer = createReducer(
   userInitialState,
-  on(retrieveProfileSuccess, (state, { userDetails }):User => {
-    console.log("reduced wordking----------------",userDetails);
-    return userDetails
+  on(retrieveProfileSuccess, (state, { userDetails }): User => {
+    return userDetails;
   })
 );
 
@@ -24,15 +23,15 @@ export function profileReducer(state: any, action: any) {
 
 //=======================================================//
 
-// export const initialState: User[] = [];
+export const initialState: User[] = [];
 
-// const _UsersReducer = createReducer(
-//   initialState,
-//   on(retrieveUsersSuccess, (state, { allUsers }):User[] => {
-//     return [...allUsers];
-//   })
-// );
+const _UsersReducer = createReducer(
+  initialState,
+  on(retrieveUsersSuccess, (state, { allUsers }): User[] => {
+    return [...allUsers];
+  })
+);
 
-// export function usersReducer(state: User[] | undefined, action: any) {
-//   return _UsersReducer(state, action);
-// }
+export function usersReducer(state: User[] | undefined, action: any) {
+  return _UsersReducer(state, action);
+}

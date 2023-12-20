@@ -23,7 +23,7 @@ export class ProfileComponent implements OnInit, AfterViewInit {
 
   constructor(
     private http: HttpClient,
-    private router:Router,
+    private router: Router,
     private store: Store<{ userDetails: User }>
   ) {}
 
@@ -43,7 +43,6 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
   ngOnInit(): void {
     this.store.dispatch(retrieveProfile());
-
   }
   onSubmit() {
     const formData = new FormData();
@@ -72,22 +71,3 @@ export class ProfileComponent implements OnInit, AfterViewInit {
   }
 }
 
-// Subscribe to the userData$ observable
-// this.userDataSubscription = this.store
-//   .pipe(select(userProfileSelector))
-//   .subscribe((profileData) => {
-//     // Ensure that profileData is not undefined before accessing its properties
-//     if (profileData) {
-//       this.name = profileData.name;
-//       this.email = profileData.email;
-//       this.img = profileData.image;
-//       console.log('profileData', profileData);
-//     }
-//   });
-
-// ngOnDestroy(): void {
-//   // Unsubscribe when the component is destroyed
-//   if (this.userDataSubscription) {
-//     this.userDataSubscription.unsubscribe();
-//   }
-// }

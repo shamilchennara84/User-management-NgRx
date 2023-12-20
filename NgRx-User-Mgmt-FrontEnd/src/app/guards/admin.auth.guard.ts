@@ -1,13 +1,13 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 
-export const adminLoginGuard: CanActivateFn = (route, state) => {
+export const adminAuthGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   const isAdminLoggedIn = localStorage.getItem('isAdminLoggedIn');
-  if (isAdminLoggedIn) {
+  if (!isAdminLoggedIn) {
     console.log('admin already logged in');
-    router.navigate(['/admin/dashboard']);
+    router.navigate(['/admin']);
     return false;
   }
 
